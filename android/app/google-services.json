@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776026577727",
+    "project_id": "waypoint-d75ca",
+    "storage_bucket": "waypoint-d75ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776026577727:android:c647dc8674f1ff3217918a",
+        "android_client_info": {
+          "package_name": "com.fcm.waypoint"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGyw-vaU65oWMAohy5TOUNzUn2IpcrPGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+} 

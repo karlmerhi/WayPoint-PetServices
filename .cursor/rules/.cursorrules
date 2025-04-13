@@ -1,0 +1,85 @@
+# .cursorrules
+
+# Application Overview
+APPLICATION_NAME: WayPoint
+APPLICATION_PURPOSE: A mobile-first SaaS platform for pet grooming businesses to manage appointments, routes, customers, and payments.
+TARGET_USERS: Mobile pet groomers who travel to customers' locations
+BUSINESS_MODEL: Subscription-based ($49-79/month per business)
+MVP_TIMELINE: 2 months for initial release
+
+# Technical Stack 
+TECH_STACK:
+  - React Native with Expo (SDK 52)
+  - Firebase (Auth, Firestore, Storage, Functions)
+  - Expo Router for navigation
+  - React Native Maps for location services
+  - Stripe for payment processing
+  - Formik and Yup for form handling
+  - TypeScript for type safety
+  - React Native Reanimated for animations
+  - React Native Paper for UI components
+  - AsyncStorage for local data persistence
+  - React Native Calendars for appointment scheduling
+
+# Project Structure
+PROJECT_STRUCTURE:
+  - app/ (Expo Router setup)
+    - (tabs)/ (Main tab navigation)
+    - _layout.tsx (Root layout)
+    - utils/ (Utility functions)
+  - components/ (UI components)
+    - ui/ (Platform-specific UI components)
+  - constants/ (App constants)
+  - hooks/ (Custom React hooks)
+  - assets/ (Images and fonts)
+  - scripts/ (Build and utility scripts)
+
+# Key Features (MVP)
+PRIORITY_FEATURES:
+  1. Authentication system
+  2. Customer & pet profiles
+  3. Appointment scheduling
+  4. Route optimization
+  5. Payment processing
+  6. Offline data synchronization
+
+# Coding Standards
+CODE_STANDARDS:
+  - Use TypeScript with proper typing
+  - Use functional components with hooks
+  - Follow Expo Router patterns
+  - Create reusable components
+  - Implement proper error handling
+  - Support offline functionality using AsyncStorage
+  - Use platform-specific components when necessary (.ios.tsx, .android.tsx)
+  - Follow ESLint configuration for code quality
+  - Use Formik and Yup for form validation
+
+# State Management
+STATE_MANAGEMENT:
+  - Use React Context for global state when needed
+  - Firebase for remote data
+  - AsyncStorage for persistent local data
+  - React Query (future consideration) for data fetching and caching
+
+# Offline Strategy
+OFFLINE_STRATEGY:
+  - Use AsyncStorage to cache essential data
+  - Queue writes when offline for later synchronization
+  - Implement optimistic UI updates
+  - Show appropriate offline indicators to users
+  - Sync data when connection is restored
+
+# Testing Strategy
+TESTING_STRATEGY:
+  - Jest for unit testing
+  - React Native Testing Library for component testing
+  - Manual testing on physical devices
+  - Test offline functionality with network conditions
+
+# Deployment
+DEPLOYMENT:
+  - Use EAS Build for building app binaries
+  - EAS Submit for app store submissions
+  - Configure production and staging environments
+  - Use EAS Update for over-the-air updates
