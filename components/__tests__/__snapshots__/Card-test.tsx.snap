@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card renders correctly with default props 1`] = `
+<View
+  style={
+    [
+      {
+        "borderRadius": 8,
+        "margin": 8,
+        "overflow": "hidden",
+      },
+      {
+        "backgroundColor": "#F5F7F7",
+      },
+      {
+        "elevation": 1,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 1,
+          "width": 0,
+        },
+        "shadowOpacity": 0.1,
+        "shadowRadius": 2,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    style={
+      [
+        {
+          "padding": 16,
+          "paddingTop": 16,
+        },
+        {
+          "paddingTop": 16,
+        },
+      ]
+    }
+  >
+    <Text>
+      Card content
+    </Text>
+  </View>
+</View>
+`;

@@ -1,0 +1,75 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Default: deny all access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+    
+    // Allow users to access only their own files
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isSignedIn() && isOwner(userId);
+      allow write: if isSignedIn() && isOwner(userId);
+    }
+    
+    // Public app assets
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Only allow write access through admin or backend
+    }
+    
+    // Temporary uploads (e.g., for image processing)
+    match /temp/{fileName} {
+      // Allow authenticated users to upload temporary files
+      // with a TTL metadata field set to a timestamp
+      allow write: if isSignedIn() && 
+                     request.resource.metadata.TTL != null && 
+                     request.resource.size < 10 * 1024 * 1024; // 10MB file size limit
+      
+      allow read: if isSignedIn() && 
+                    request.auth.uid == resource.metadata.userId;
+    }
+    
+    // Pet photos - accessible by pet owners
+    match /pets/{petId}/{fileName} {
+      // Function to check if user owns the customer linked to this pet
+      function ownsCustomer() {
+        // This would require a Firestore function call which isn't directly supported
+        // So we'll use a userId metadata field instead for simplicity
+        return resource.metadata.userId == request.auth.uid;
+      }
+      
+      allow read: if isSignedIn() && (
+        resource.metadata.userId == request.auth.uid ||
+        ownsCustomer()
+      );
+      
+      allow write: if isSignedIn() && 
+                    request.resource.metadata.userId == request.auth.uid &&
+                    request.resource.size < 10 * 1024 * 1024; // 10MB file size limit
+    }
+    
+    // Appointment photos - accessible by the groomer and the customer
+    match /appointments/{appointmentId}/{fileName} {
+      // Read access to both groomer and customer
+      allow read: if isSignedIn() && (
+        resource.metadata.userId == request.auth.uid ||
+        resource.metadata.customerId == request.auth.uid
+      );
+      
+      // Write access only to groomer
+      allow write: if isSignedIn() && 
+                    request.resource.metadata.userId == request.auth.uid &&
+                    request.resource.size < 10 * 1024 * 1024; // 10MB file size limit
+    }
+  }
+} 

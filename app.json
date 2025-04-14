@@ -42,6 +42,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.fcm.waypoint"
-    }
+    },
+    "newArchEnabled": true
   }
 }

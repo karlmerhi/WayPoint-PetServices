@@ -17,7 +17,13 @@ import {
   httpsCallable,
   connectFunctionsEmulator,
 } from "firebase/functions";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { 
+  getAuth, 
+  connectAuthEmulator, 
+  initializeAuth, 
+  getReactNativePersistence 
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
@@ -33,14 +39,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase services
-export const auth = getAuth(app);
+// Initialize Firebase services with AsyncStorage persistence for Auth
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
 export const db = getFirestore(app);
 export const rtdb = getDatabase(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
-// Connect to emulators in development environment
+// Connect to emulators in development environment - DISABLED FOR NOW
+// Uncomment this block when you have Firebase emulators properly set up
+/*
 if (process.env.EXPO_PUBLIC_APP_ENV === "development") {
   console.log("Using Firebase Emulators in development mode");
   connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
@@ -48,8 +58,8 @@ if (process.env.EXPO_PUBLIC_APP_ENV === "development") {
   connectDatabaseEmulator(rtdb, "localhost", 9000);
   connectStorageEmulator(storage, "localhost", 9199);
   connectFunctionsEmulator(functions, "localhost", 5001);
-  // Note: There's no direct connector for Pub/Sub emulator in client SDKs
 }
+*/
 
 // Upload Firestore rules
 export const uploadFirestoreRules = async (rulesContent: string) => {
@@ -103,3 +113,19 @@ export const addFirestoreDocument = async (
 };
 
 export { app };
+
+// Default export to prevent Expo Router warnings
+const firebaseServices = {
+  app,
+  auth,
+  db,
+  rtdb,
+  storage,
+  functions,
+  uploadFirestoreRules,
+  uploadDatabaseRules,
+  updateDatabaseEntry,
+  addFirestoreDocument
+};
+
+export default firebaseServices;

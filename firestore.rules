@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions for checking roles and ownership
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function hasUserIdField() {
+      return request.resource.data.userId != null;
+    }
+    
+    function userIdMatches() {
+      return isOwner(request.resource.data.userId);
+    }
+    
+    function existingUserIdMatches() {
+      return isOwner(resource.data.userId);
+    }
+    
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // User profiles - users can only read/write their own profile
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if false; // Don't allow profile deletion through rules
+    }
+    
+    // Customers - users can only access their own customers
+    match /customers/{customerId} {
+      allow read: if isSignedIn() && (
+        existingUserIdMatches() || 
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isSignedIn() && hasUserIdField() && userIdMatches();
+      allow update: if isSignedIn() && existingUserIdMatches();
+      allow delete: if isSignedIn() && existingUserIdMatches();
+    }
+    
+    // Pets - users can access pets linked to their customers
+    match /pets/{petId} {
+      // Custom function to check if the pet belongs to a customer owned by the user
+      function isCustomerOwner() {
+        return get(/databases/$(database)/documents/customers/$(resource.data.customerId)).data.userId == request.auth.uid;
+      }
+      
+      function willBeCustomerOwner() {
+        return get(/databases/$(database)/documents/customers/$(request.resource.data.customerId)).data.userId == request.auth.uid;
+      }
+      
+      allow read: if isSignedIn() && isCustomerOwner();
+      allow create: if isSignedIn() && willBeCustomerOwner();
+      allow update: if isSignedIn() && isCustomerOwner();
+      allow delete: if isSignedIn() && isCustomerOwner();
+    }
+    
+    // Appointments - users can only access their own appointments
+    match /appointments/{appointmentId} {
+      allow read: if isSignedIn() && (
+        existingUserIdMatches() || 
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isSignedIn() && hasUserIdField() && userIdMatches();
+      allow update: if isSignedIn() && existingUserIdMatches();
+      allow delete: if isSignedIn() && existingUserIdMatches();
+    }
+    
+    // Services - users can only access their own services
+    match /services/{serviceId} {
+      allow read: if isSignedIn() && (
+        existingUserIdMatches() || 
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isSignedIn() && hasUserIdField() && userIdMatches();
+      allow update: if isSignedIn() && existingUserIdMatches();
+      allow delete: if isSignedIn() && existingUserIdMatches();
+    }
+    
+    // Transactions - users can only access their own transactions
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn() && (
+        existingUserIdMatches() || 
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isSignedIn() && hasUserIdField() && userIdMatches();
+      allow update: if isSignedIn() && existingUserIdMatches();
+      allow delete: if isSignedIn() && existingUserIdMatches();
+    }
+    
+    // Todos - users can only access their own todos
+    match /todos/{todoId} {
+      allow read: if isSignedIn() && (
+        existingUserIdMatches() || 
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isSignedIn() && hasUserIdField() && userIdMatches();
+      allow update: if isSignedIn() && existingUserIdMatches();
+      allow delete: if isSignedIn() && existingUserIdMatches();
+    }
+  }
+} 

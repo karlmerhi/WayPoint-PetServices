@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Pressable, PressableProps } from "react-native";
 import * as Haptics from "expo-haptics";
 
@@ -9,16 +9,18 @@ interface HapticTabProps extends PressableProps {
 /**
  * A tab component that provides haptic feedback when pressed
  */
-export function HapticTab({ onPress, children, ...props }: HapticTabProps) {
-  const handlePress = () => {
-    // Light impact feedback for tab press
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onPress?.();
-  };
+export const HapticTab = forwardRef<Pressable, HapticTabProps>(
+  ({ onPress, children, ...props }, ref) => {
+    const handlePress = () => {
+      // Light impact feedback for tab press
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      onPress?.();
+    };
 
-  return (
-    <Pressable onPress={handlePress} {...props}>
-      {children}
-    </Pressable>
-  );
-}
+    return (
+      <Pressable ref={ref} onPress={handlePress} {...props}>
+        {children}
+      </Pressable>
+    );
+  }
+);

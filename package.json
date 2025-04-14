@@ -1,8 +1,10 @@
 {
-  "name": "waypoint-new",
+  "name": "waypoint",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "type": "module",
+  "description": "Mobile pet grooming management application built with Expo, React Native, and Firebase",
+  "author": "WayPoint Team",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -12,7 +14,8 @@
     "test": "jest --watchAll",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "emulator:firebase": "firebase emulators:start"
+    "emulator:firebase": "firebase emulators:start",
+    "clear": "expo start --clear"
   },
   "jest": {
     "preset": "jest-expo"
@@ -20,9 +23,11 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-community/netinfo": "^11.4.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@stripe/stripe-react-native": "0.38.6",
+    "date-fns": "^4.1.0",
     "expo": "~52.0.43",
     "expo-blur": "~14.0.3",
     "expo-camera": "~16.0.18",
@@ -59,13 +64,16 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
+    "uuid": "^11.1.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "@typescript-eslint/parser": "^8.29.1",
     "eslint-plugin-react": "^7.37.5",
